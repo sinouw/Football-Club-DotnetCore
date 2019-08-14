@@ -63,7 +63,7 @@ namespace WebAPI.Controllers.Users
             {
                 user.IsActive = !user.IsActive;
                 await _userManager.UpdateAsync(user);
-                return Ok(user.IsActive);
+                return Ok(user);
 
             }
             catch
@@ -77,7 +77,7 @@ namespace WebAPI.Controllers.Users
         public async Task<IActionResult> Delete(string id)
         {
 
-            var user = await _userManager.Users.FirstOrDefaultAsync(u=>u.Id==id);
+            var user = await _userManager.Users.FirstOrDefaultAsync(u=>u.Id== id);
             if (user == null)
             {
                 return NotFound();

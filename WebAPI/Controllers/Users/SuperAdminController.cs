@@ -80,15 +80,11 @@ namespace WebAPI.Controllers.Users
 
             try
             {
-                if (await _userManager.Users.SingleOrDefaultAsync(c => c.UserName == superadmin.UserName) != null)
-                {
-                    return NoContent();
-
-                }
                 user.UserName = superadmin.UserName;
                 user.Email = superadmin.Email;
                 user.FullName = superadmin.FullName;
                 user.PhoneNumber = superadmin.PhoneNumber;
+                user.Gender = superadmin.Gender;
                 await _userManager.UpdateAsync(user);
                 return Ok(user);
 

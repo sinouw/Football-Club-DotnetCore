@@ -82,6 +82,7 @@ namespace WebAPI.Controllers
                 user.Email = client.Email;
                 user.FullName = client.FullName;
                 user.PhoneNumber = client.PhoneNumber;
+                user.Gender = client.Gender;
                 await _userManager.UpdateAsync(user);
                 return Ok(user);
 

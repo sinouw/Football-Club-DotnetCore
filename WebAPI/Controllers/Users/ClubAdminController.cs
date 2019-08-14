@@ -83,6 +83,7 @@ namespace WebAPI.Controllers.Users
                 user.Email = ClubAdmin.Email;
                 user.FullName = ClubAdmin.FullName;
                 user.PhoneNumber = ClubAdmin.PhoneNumber;
+                user.Gender = ClubAdmin.Gender;
                 await _userManager.UpdateAsync(user);
                 return Ok(user);
 
