@@ -44,7 +44,8 @@ namespace WebAPI.Controllers
                 Email = model.Email,
                 FullName = model.FullName,
                 PhoneNumber = model.PhoneNumber,
-                IsActive = true
+                IsActive = true,
+                //Gender = model.Gender
             };
 
             try

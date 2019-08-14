@@ -12,5 +12,6 @@ namespace WebAPI.Models
         [Column(TypeName ="nvarchar(150)")]
         public string FullName { get; set; }
         public bool IsActive { get; set; }
+        public bool Gender { get; set; }
     }
 }
