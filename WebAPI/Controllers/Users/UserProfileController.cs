@@ -32,6 +32,7 @@ namespace WebAPI.Controllers
                  user.Email,
                  user.UserName,
                  user.PhoneNumber,
+                 user.Gender
                 
             };
         }

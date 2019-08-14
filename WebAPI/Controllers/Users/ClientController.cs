@@ -45,7 +45,7 @@ namespace WebAPI.Controllers
                 FullName = model.FullName,
                 PhoneNumber = model.PhoneNumber,
                 IsActive = true,
-                //Gender = model.Gender
+                Gender = model.Gender
             };
 
             try
