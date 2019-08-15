@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -85,6 +86,8 @@ namespace WebAPI
                     ClockSkew = TimeSpan.Zero
                 };
             });
+
+            services.AddOData();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -106,7 +109,10 @@ namespace WebAPI
 
             app.UseAuthentication();
 
-            app.UseMvc();
+            app.UseMvc(routerBuilder => {
+                routerBuilder.EnableDependencyInjection();
+                routerBuilder.Expand().Select().Count().OrderBy().Filter();
+            });
         }
     }
 }

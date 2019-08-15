@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using WebAPI.Models.Sports;
 using WebAPI.Models;
+using Microsoft.AspNet.OData;
 
 namespace WebAPI.Controllers.Sports
 {
+    [EnableQuery()]
     [Route("api/[controller]")]
     [ApiController]
     public class ImagesController : ControllerBase

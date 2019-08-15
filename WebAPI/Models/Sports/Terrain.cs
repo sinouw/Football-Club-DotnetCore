@@ -28,7 +28,7 @@ public class Terrain
         public string Type { get; set; }
         [Required]
         public bool Free { get; set; } = true;
-
+        public double Price { get; set; }
         //Navigation
         public Guid IdClub { get; set; }
         public Club club { get; set; }

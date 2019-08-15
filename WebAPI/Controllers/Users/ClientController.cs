@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -34,6 +35,24 @@ namespace WebAPI.Controllers
         }
 
 
+        //Get : /api/Client
+        [HttpGet]
+        [EnableQuery()]
+        public async Task<ActionResult<IEnumerable<Client>>> getClients()
+        {
+            return await _context.Clients.Include(c=>c.Reservations).ToListAsync();
+        }
+
+        //Get : /api/Client/id
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Client>> getClient(string id)
+        {
+            return await _context.Clients.Include(c => c.Reservations).SingleOrDefaultAsync(c=>c.Id==id);
+        }
+
+
+
+
         [HttpPost]
         [Route("Register")]
         //POST : /api/ApplicationUser/Register
@@ -61,6 +80,9 @@ namespace WebAPI.Controllers
             }
         }
 
+
+       
+  
         //Put : /api/Client/Edit
         [HttpPut("Edit/{id}")]
         public async Task<IActionResult> Edit(string id, Client client)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +10,8 @@ using WebAPI.Models;
 
 namespace WebAPI.Controllers.Sports
 {
-    [Route("api/[controller]")]
+    [EnableQuery()]
+    [Route("api/Terrains")]
     [ApiController]
     public class TerrainsController : ControllerBase
     {
@@ -24,7 +26,8 @@ namespace WebAPI.Controllers.Sports
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Terrain>>> GetTerrains()
         {
-            return await _context.Terrains.Include(t => t.Images).ToListAsync();
+            return await _context.Terrains.Include(t => t.Reservations).Include(t => t.club).ToListAsync();
+            //return await _context.Terrains.ToListAsync();
         }
 
         // GET: api/Terrains/5

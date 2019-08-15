@@ -28,17 +28,14 @@ namespace WebAPI.Models
                     new { Id = "3", Name = "Client", NormalizedName = "CLIENT" }
                 );
 
-            builder.Entity<Reservation>()
-            .HasKey(bc => new { bc.IdClient, bc.IdTerrain });
-
-            builder.Entity<Reservation>()
-            .HasOne(bc => bc.Client)
-            .WithMany(b => b.Reservations)
+            builder.Entity<Client>()
+            .HasMany(c => c.Reservations)
+            .WithOne(t => t.Client)
             .HasForeignKey(bc => bc.IdClient);
 
-            builder.Entity<Reservation>()
-            .HasOne(bc => bc.Terrain)
-            .WithMany(c => c.Reservations)
+            builder.Entity<Terrain>()
+            .HasMany(c => c.Reservations)
+            .WithOne(t => t.Terrain)
             .HasForeignKey(bc => bc.IdTerrain);
 
             builder.Entity<Club>()

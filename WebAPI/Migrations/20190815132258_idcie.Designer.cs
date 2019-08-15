@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebAPI.Models;
 
 namespace WebAPI.Migrations
 {
     [DbContext(typeof(ClubsContext))]
-    partial class EshopContextModelSnapshot : ModelSnapshot
+    [Migration("20190815132258_idcie")]
+    partial class idcie
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -253,9 +255,11 @@ namespace WebAPI.Migrations
                     b.Property<Guid>("IdReservation")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("EndRes");
+                    b.Property<Guid>("ClientId");
 
-                    b.Property<string>("IdClient");
+                    b.Property<string>("ClientId1");
+
+                    b.Property<DateTime>("EndRes");
 
                     b.Property<Guid>("IdTerrain");
 
@@ -265,7 +269,7 @@ namespace WebAPI.Migrations
 
                     b.HasKey("IdReservation");
 
-                    b.HasIndex("IdClient");
+                    b.HasIndex("ClientId1");
 
                     b.HasIndex("IdTerrain");
 
@@ -407,7 +411,7 @@ namespace WebAPI.Migrations
                 {
                     b.HasOne("WebAPI.Models.Auth.Roles.Client", "Client")
                         .WithMany("Reservations")
-                        .HasForeignKey("IdClient");
+                        .HasForeignKey("ClientId1");
 
                     b.HasOne("WebAPI.Models.Terrain", "Terrain")
                         .WithMany("Reservations")
