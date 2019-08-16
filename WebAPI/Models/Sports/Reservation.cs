@@ -17,10 +17,9 @@ namespace WebAPI.Models
         public Client Client { get; set; }
         public Guid IdTerrain { get; set; }
         public Terrain Terrain { get; set; }
-        [DisplayFormat(DataFormatString = "{hh:mm}")]
-        public DateTime StartRes { get; set; }
-        [DisplayFormat(DataFormatString = "{hh:mm}")]
-        public DateTime EndRes { get; set; }
+        public string resDay { get; set; }
+        public string StartRes { get; set; }
+        public string EndRes { get; set; }
         public string status { get; set; }
     }
 }

@@ -26,14 +26,14 @@ namespace WebAPI.Controllers.Sports
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Club>>> GetClubs()
         {
-            return await _context.Clubs.ToListAsync();
+            return await _context.Clubs.Include(c=>c.Terrains).ToListAsync();
         }
 
         // GET: api/Clubs/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Club>> GetClub(Guid id)
         {
-            var club = await _context.Clubs.FindAsync(id);
+            var club = await _context.Clubs.Include(c => c.Terrains).SingleOrDefaultAsync(c=>c.IdClub==id);
 
             if (club == null)
             {

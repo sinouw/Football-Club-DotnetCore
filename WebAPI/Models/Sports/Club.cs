@@ -28,12 +28,13 @@ namespace WebAPI.Models
         [Required, EmailAddress]
         public string Email { get; set; }
         
-        public DateTime OpeningTime { get; set; }
-        public DateTime ClosingTime { get; set; }
+        public string OpeningTime { get; set; }
+        public string ClosingTime { get; set; }
 
         [Required]
         public bool IsActive { get; set; }
-  
+        public string lng { get; set; }
+        public string lat { get; set; }
 
         public ICollection<Terrain> Terrains { get; set; }
 

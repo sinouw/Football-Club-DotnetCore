@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebAPI.Models;
 
 namespace WebAPI.Migrations
 {
     [DbContext(typeof(ClubsContext))]
-    partial class EshopContextModelSnapshot : ModelSnapshot
+    [Migration("20190815204930_lanlatt club")]
+    partial class lanlattclub
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -217,7 +219,7 @@ namespace WebAPI.Migrations
                     b.Property<string>("Address")
                         .IsRequired();
 
-                    b.Property<string>("ClosingTime");
+                    b.Property<DateTime>("ClosingTime");
 
                     b.Property<Guid>("ClubAdminId");
 
@@ -231,7 +233,7 @@ namespace WebAPI.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<string>("OpeningTime");
+                    b.Property<DateTime>("OpeningTime");
 
                     b.Property<int>("Phone");
 
@@ -257,15 +259,13 @@ namespace WebAPI.Migrations
                     b.Property<Guid>("IdReservation")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("EndRes");
+                    b.Property<DateTime>("EndRes");
 
                     b.Property<string>("IdClient");
 
                     b.Property<Guid>("IdTerrain");
 
-                    b.Property<string>("StartRes");
-
-                    b.Property<string>("resDay");
+                    b.Property<DateTime>("StartRes");
 
                     b.Property<string>("status");
 
