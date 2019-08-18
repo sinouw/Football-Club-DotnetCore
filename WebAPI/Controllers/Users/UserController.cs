@@ -22,6 +22,7 @@ namespace WebAPI.Controllers.Users
 
         //Get : /api/User
         [HttpGet]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<ActionResult<IEnumerable<User>>> getusers() {
             return await _userManager.Users.ToListAsync();
         }

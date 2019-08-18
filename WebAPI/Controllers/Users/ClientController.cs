@@ -95,10 +95,10 @@ namespace WebAPI.Controllers
 
             try
             {
-                if (await _userManager.Users.SingleOrDefaultAsync(c => c.UserName == client.UserName) != null)
-                {
-                    return NoContent();
+           
 
+                if ( user.UserName != client.UserName ) {
+                    return BadRequest();
                 }
                 user.UserName = client.UserName;
                 user.Email = client.Email;
