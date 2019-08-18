@@ -80,10 +80,17 @@ namespace WebAPI.Controllers.Sports
         [HttpPost]
         public async Task<ActionResult<Reservation>> PostReservation(Reservation reservation)
         {
+            try
+            {
             _context.Reservations.Add(reservation);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetReservation", new { id = reservation.IdReservation }, reservation);
+
+            }catch(Exception ex)
+            {
+                throw ex;
+            }
         }
 
         // DELETE: api/Reservations/5
