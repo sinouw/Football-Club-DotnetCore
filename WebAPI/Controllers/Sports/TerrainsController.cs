@@ -30,6 +30,15 @@ namespace WebAPI.Controllers.Sports
             //return await _context.Terrains.ToListAsync();
         }
 
+        //// GET: api/Terrains
+        //[HttpGet("[action]/{id}")]
+        //[Authorize(Roles = "ClubAdmin, SuperAdmin")]
+        //public async Task<ActionResult<IEnumerable<Terrain>>> GetTerrainsByClubAdmin()
+        //{
+        //    return await _context.Terrains.Include(t => t.Reservations).Include(t => t.club).ToListAsync();
+        //    //return await _context.Terrains.ToListAsync();
+        //}
+
         // GET: api/Terrains/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Terrain>> GetTerrain(Guid id)
