@@ -50,12 +50,19 @@ namespace WebAPI.Controllers.Sports
         [HttpPut("{id}")]
         public async Task<IActionResult> PutReservation(Guid id, Reservation reservation)
         {
-            if (id != reservation.IdReservation)
+            var res = await _context.Reservations.FindAsync(id);
+            if (res == null)
             {
                 return BadRequest();
             }
 
-            _context.Entry(reservation).State = EntityState.Modified;
+
+            res.resDay = reservation.resDay;
+            res.StartRes = reservation.StartRes;
+            res.EndRes = reservation.EndRes;
+            res.status = reservation.status;
+
+            _context.Entry(res).State = EntityState.Modified;
 
             try
             {
