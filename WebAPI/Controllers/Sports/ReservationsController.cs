@@ -24,12 +24,36 @@ namespace WebAPI.Controllers.Sports
 
         // GET: api/Reservations
         [HttpGet]
-        
         public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations()
         {
             return await _context.Reservations.Include(r => r.Client).Include(r => r.Terrain).ToListAsync();
-            //return await _context.Reservations.Include(r=>r.Client).ToListAsync();
         }
+
+        // GET: api/Reservations/5
+        [HttpGet("terrains/{id}")]
+        [EnableQuery()]
+        public async Task<ActionResult> GetReservationByTerrain(Guid id)
+        {
+            var terrain = await _context.Terrains.Include(t=>t.Reservations).SingleOrDefaultAsync(r => r.IdTerrain == id);
+
+
+            if (terrain == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(terrain.Reservations);
+        }
+
+
+
+
+        //// GET: api/Reservations
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<Reservation>>> GetFreeReservations()
+        //{
+        //    return 
+        //}
 
         // GET: api/Reservations/5
         [HttpGet("{id}")]
@@ -57,9 +81,8 @@ namespace WebAPI.Controllers.Sports
             }
 
 
-            res.resDay = reservation.resDay;
-            res.StartRes = reservation.StartRes;
-            res.EndRes = reservation.EndRes;
+            res.StartReservation = reservation.StartReservation;
+            res.EndReservation = reservation.EndReservation;
             res.status = reservation.status;
 
             _context.Entry(res).State = EntityState.Modified;
@@ -87,14 +110,56 @@ namespace WebAPI.Controllers.Sports
         [HttpPost]
         public async Task<ActionResult<Reservation>> PostReservation(Reservation reservation)
         {
+
+            DateTime NewreservationStart= Convert.ToDateTime(reservation.StartReservation);
+            DateTime NewreservationEnd= Convert.ToDateTime(reservation.EndReservation);
+
+            var terrain = await _context.Terrains.Include(t=>t.Reservations).SingleOrDefaultAsync(r => r.IdTerrain == reservation.IdTerrain);
+            if (terrain == null)
+            {
+                return BadRequest(new { message = "Terrain not found" });
+            }
+            //var club = await _context.Terrains.SingleOrDefaultAsync(t => t.IdClub == terrain.IdClub);
+          
+            if (DateTime.Compare(NewreservationStart, DateTime.Now) < 0 )
+            {
+                return BadRequest(new { message = "This Date has been passed" });
+            }
+            if (DateTime.Compare(NewreservationStart, NewreservationEnd) == 0 || DateTime.Compare(NewreservationStart, NewreservationEnd)==1)
+            {
+                return BadRequest(new { message = "The given Date is invalid" });
+            }
+
+            var reservations = terrain.Reservations;
+            foreach (var res in reservations)
+            {
+                if (DateTime.Compare(NewreservationStart, Convert.ToDateTime(res.StartReservation)) == 0 || DateTime.Compare(NewreservationEnd, Convert.ToDateTime(res.EndReservation)) == 0)
+                {
+                    return BadRequest(new { message = "This ReservationDate is invalid" });
+
+                }
+                else
+                {
+                     if (DateTime.Compare(NewreservationStart, Convert.ToDateTime(res.EndReservation)) == -1 && DateTime.Compare(NewreservationStart, Convert.ToDateTime(res.StartReservation)) == 1)
+                        {
+                        return BadRequest(new { message = "This Reservation StartDate is invalid" });
+                        }
+                    if (DateTime.Compare(NewreservationEnd, Convert.ToDateTime(res.EndReservation)) == -1 && DateTime.Compare(NewreservationEnd, Convert.ToDateTime(res.StartReservation)) == 1)
+                    {
+                        return BadRequest(new { message = "This Reservation EndDate is invalid" });
+                    }
+
+                }
+            }
             try
             {
-            _context.Reservations.Add(reservation);
-            await _context.SaveChangesAsync();
+                _context.Reservations.Add(reservation);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetReservation", new { id = reservation.IdReservation }, reservation);
+                return CreatedAtAction("GetReservation", new { id = reservation.IdReservation }, reservation);
 
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -104,6 +169,7 @@ namespace WebAPI.Controllers.Sports
         [HttpDelete("{id}")]
         public async Task<ActionResult<Reservation>> DeleteReservation(Guid id)
         {
+            
             var reservation = await _context.Reservations.FindAsync(id);
             if (reservation == null)
             {
