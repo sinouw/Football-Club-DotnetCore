@@ -43,7 +43,8 @@ namespace WebAPI.Controllers.Sports
         [HttpGet("{id}")]
         public async Task<ActionResult<Terrain>> GetTerrain(Guid id)
         {
-            var terrain = await _context.Terrains.Include(t => t.Images).SingleOrDefaultAsync(t => t.IdTerrain == id);
+            //var terrain = await _context.Terrains.Include(t => t.Images).SingleOrDefaultAsync(t => t.IdTerrain == id);
+            var terrain = await _context.Terrains.SingleOrDefaultAsync(t => t.IdTerrain == id);
 
             if (terrain == null)
             {
