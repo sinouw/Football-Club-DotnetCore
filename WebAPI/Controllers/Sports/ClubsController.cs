@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Algolia.Search.Clients;
 using Microsoft.AspNet.OData;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Models;
+using WebAPI.Models.Sports;
 
 namespace WebAPI.Controllers.Sports
 {
@@ -24,9 +27,48 @@ namespace WebAPI.Controllers.Sports
 
         // GET: api/Clubs
         [HttpGet]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<ActionResult<IEnumerable<Club>>> GetClubs()
         {
             return await _context.Clubs.Include(c=>c.Terrains).ToListAsync();
+        }
+
+        // GET: api/Clubs/GetClubsByClubAdmin
+        [HttpGet("[action]/{id}")]
+        [Authorize(Roles = "ClubAdmin, SuperAdmin")]
+        public IEnumerable<Club> GetClubsByClubAdmin(Guid id)
+        {
+            return _context.Clubs.Include(c => c.Terrains).Where(c => c.ClubAdminId == id);
+        }
+
+
+
+        // GET: api/algolia
+        [HttpGet]
+        [Route("[action]")]
+        public List<ClubAlgolia> Algolia()
+        {
+            // Add the data to Algolia
+            SearchClient client = new SearchClient("ZJ5YQA6729", "ef857c06f1ebf56ed75841fc6c2df18b");
+            SearchIndex index = client.InitIndex("ClubFoot");
+            List<ClubAlgolia> clubs = new List<ClubAlgolia>();
+            foreach (Club club in _context.Clubs.ToList())
+            {
+                var clubNew = new ClubAlgolia()
+                {
+                    ObjectID = club.IdClub.ToString(),
+                    Name = club.Name,
+                    Address = club.Address,
+                    Phone = club.Phone,
+                    Email = club.Email,
+                    OpeningTime = club.OpeningTime,
+                    ClosingTime = club.ClosingTime
+                };
+                clubs.Add(clubNew);
+            }
+            // Fetch from DB or a Json file
+            index.SaveObjects(clubs);
+            return clubs;
         }
 
         // GET: api/Clubs/5
@@ -95,6 +137,7 @@ namespace WebAPI.Controllers.Sports
 
             return NoContent();
         }
+
 
         // POST: api/Clubs
         [HttpPost]
