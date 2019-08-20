@@ -20,5 +20,6 @@ namespace WebAPI.Models
         public string StartReservation { get; set; }
         public string EndReservation { get; set; }
         public string status { get; set; }
+        public double Price { get; set; }
     }
 }

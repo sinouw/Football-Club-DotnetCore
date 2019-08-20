@@ -88,6 +88,7 @@ namespace WebAPI.Controllers.Sports
             {
                
                     var terrain = await _context.Terrains.Include(t => t.Reservations).SingleOrDefaultAsync(r => r.IdTerrain == resu.IdTerrain);
+
                     if (terrain == null)
                     {
                         return BadRequest(new { message = "Terrain not found" });
@@ -150,7 +151,7 @@ namespace WebAPI.Controllers.Sports
                 }
             }
 
-
+            
             resu.StartReservation = reservation.StartReservation;
             resu.EndReservation = reservation.EndReservation;
             resu.status = reservation.status;
@@ -223,9 +224,11 @@ namespace WebAPI.Controllers.Sports
             }
             try
             {
+                
+                double hours = (NewreservationEnd - NewreservationStart).TotalHours;
+                reservation.Price = hours * terrain.Price;
                 _context.Reservations.Add(reservation);
                 await _context.SaveChangesAsync();
-
                 return CreatedAtAction("GetReservation", new { id = reservation.IdReservation }, reservation);
 
             }
