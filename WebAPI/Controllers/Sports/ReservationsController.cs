@@ -74,18 +74,88 @@ namespace WebAPI.Controllers.Sports
         [HttpPut("{id}")]
         public async Task<IActionResult> PutReservation(Guid id, Reservation reservation)
         {
-            var res = await _context.Reservations.FindAsync(id);
-            if (res == null)
+            var resu = await _context.Reservations.FindAsync(id);
+            if (resu == null)
             {
                 return BadRequest();
             }
 
+            DateTime NewreservationStart = Convert.ToDateTime(reservation.StartReservation);
+            DateTime NewreservationEnd = Convert.ToDateTime(reservation.EndReservation);
 
-            res.StartReservation = reservation.StartReservation;
-            res.EndReservation = reservation.EndReservation;
-            res.status = reservation.status;
 
-            _context.Entry(res).State = EntityState.Modified;
+            if (resu.StartReservation!= reservation.StartReservation || resu.EndReservation != reservation.EndReservation)
+            {
+               
+                    var terrain = await _context.Terrains.Include(t => t.Reservations).SingleOrDefaultAsync(r => r.IdTerrain == resu.IdTerrain);
+                    if (terrain == null)
+                    {
+                        return BadRequest(new { message = "Terrain not found" });
+                    }
+                    //var club = await _context.Terrains.SingleOrDefaultAsync(t => t.IdClub == terrain.IdClub);
+
+                    if (DateTime.Compare(NewreservationStart, DateTime.Now) < 0)
+                    {
+                        return BadRequest(new { message = "This Date has been passed" });
+                    }
+
+                    if (DateTime.Compare(NewreservationStart, NewreservationEnd) == 0 || DateTime.Compare(NewreservationStart, NewreservationEnd) == 1)
+                    {
+                        return BadRequest(new { message = "The given Date is invalid" });
+                    }
+                if (DateTime.Compare(NewreservationStart, Convert.ToDateTime(resu.StartReservation)) == -1 || DateTime.Compare(NewreservationStart, Convert.ToDateTime(resu.EndReservation)) == 1)
+                {
+                    var reservations = terrain.Reservations;
+                    foreach (var res in reservations)
+                    {
+                
+                            if (DateTime.Compare(NewreservationStart, Convert.ToDateTime(res.StartReservation)) == 0)
+                            {
+                                return BadRequest(new { message = "This ReservationDate is invalid" });
+
+                            }
+                            else
+                            {
+                                if (DateTime.Compare(NewreservationStart, Convert.ToDateTime(res.EndReservation)) == -1 && DateTime.Compare(NewreservationStart, Convert.ToDateTime(res.StartReservation)) == 1)
+                                {
+                                    return BadRequest(new { message = "This Reservation StartDate is invalid" });
+                                }
+                            }
+                        
+                    }
+
+                }
+                if (DateTime.Compare(NewreservationEnd, Convert.ToDateTime(resu.EndReservation)) == 1 || DateTime.Compare(NewreservationEnd, Convert.ToDateTime(resu.StartReservation)) == -1)
+                {
+                    var reservations = terrain.Reservations;
+                    foreach (var res in reservations)
+                    {
+
+                        if (DateTime.Compare(NewreservationEnd, Convert.ToDateTime(res.EndReservation)) == 0)
+                        {
+                            return BadRequest(new { message = "This ReservationDate is invalid" });
+
+                        }
+                        else
+                        {
+                            if (DateTime.Compare(NewreservationEnd, Convert.ToDateTime(res.EndReservation)) == -1 && DateTime.Compare(NewreservationEnd, Convert.ToDateTime(res.StartReservation)) == 1)
+                            {
+                                return BadRequest(new { message = "This Reservation EndDate is invalid" });
+                            }
+
+                        }
+
+                    }
+
+                }
+            }
+
+
+            resu.StartReservation = reservation.StartReservation;
+            resu.EndReservation = reservation.EndReservation;
+            resu.status = reservation.status;
+
+            _context.Entry(resu).State = EntityState.Modified;
 
             try
             {
