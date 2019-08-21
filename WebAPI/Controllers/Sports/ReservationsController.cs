@@ -91,7 +91,7 @@ namespace WebAPI.Controllers.Sports
 
                     if (terrain == null)
                     {
-                        return BadRequest(new { message = "Terrain not found" });
+                        return BadRequest(new { message = "Stadium not found" });
                     }
                     //var club = await _context.Terrains.SingleOrDefaultAsync(t => t.IdClub == terrain.IdClub);
 
@@ -188,7 +188,7 @@ namespace WebAPI.Controllers.Sports
             var terrain = await _context.Terrains.Include(t=>t.Reservations).SingleOrDefaultAsync(r => r.IdTerrain == reservation.IdTerrain);
             if (terrain == null)
             {
-                return BadRequest(new { message = "Terrain not found" });
+                return BadRequest(new { message = "Stadium not found" });
             }
             //var club = await _context.Terrains.SingleOrDefaultAsync(t => t.IdClub == terrain.IdClub);
           
