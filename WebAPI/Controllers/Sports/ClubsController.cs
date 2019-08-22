@@ -27,7 +27,6 @@ namespace WebAPI.Controllers.Sports
 
         // GET: api/Clubs
         [HttpGet]
-        [Authorize(Roles = "SuperAdmin")]
         public async Task<ActionResult<IEnumerable<Club>>> GetClubs()
         {
             return await _context.Clubs.Include(c=>c.Terrains).ToListAsync();
@@ -66,6 +65,7 @@ namespace WebAPI.Controllers.Sports
                 };
                 clubs.Add(clubNew);
             }
+            index.ClearObjects();
             // Fetch from DB or a Json file
             index.SaveObjects(clubs);
             return clubs;

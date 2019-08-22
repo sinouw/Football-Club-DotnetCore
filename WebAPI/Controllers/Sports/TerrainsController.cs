@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.OData;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,16 +28,14 @@ namespace WebAPI.Controllers.Sports
         public async Task<ActionResult<IEnumerable<Terrain>>> GetTerrains()
         {
             return await _context.Terrains.Include(t => t.Reservations).Include(t => t.club).ToListAsync();
-            //return await _context.Terrains.ToListAsync();
         }
 
         //// GET: api/Terrains
         //[HttpGet("[action]/{id}")]
         //[Authorize(Roles = "ClubAdmin, SuperAdmin")]
-        //public async Task<ActionResult<IEnumerable<Terrain>>> GetTerrainsByClubAdmin()
+        //public async Task<ActionResult<IEnumerable<Terrain>>> GetTerrainsByClubAdmin(Guid id)
         //{
-        //    return await _context.Terrains.Include(t => t.Reservations).Include(t => t.club).ToListAsync();
-        //    //return await _context.Terrains.ToListAsync();
+        //    return await _context.Terrains.Include(t => t.Reservations).Include(t => t.club).Where(t => t.club.ClubAdminId == id);
         //}
 
         // GET: api/Terrains/5

@@ -33,6 +33,20 @@ namespace WebAPI.Controllers.Users
             _context = context;
         }
 
+        // GET: api/ClubAdmin
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ClubAdmin>>> GetTerrains()
+        {
+            return await _context.ClubAdmins.Include(ca=>ca.Clubs).ThenInclude(cc=>cc.Terrains).ToListAsync();
+        }
+
+        // GET: api/ClubAdmin/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ClubAdmin>> GetTerrains(string id)
+        {
+            //return await _context.ClubAdmins.Include(ca => ca.Clubs).ThenInclude(cc => cc.Terrains).SingleOrDefaultAsync(c=>c.Id==id);
+            return await _context.ClubAdmins.Include(ca => ca.Clubs).SingleOrDefaultAsync(c=>c.Id==id);
+        }
 
         [HttpPost]
         [Route("Register")]
