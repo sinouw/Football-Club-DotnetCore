@@ -50,9 +50,6 @@ namespace WebAPI.Controllers
             return await _context.Clients.Include(c => c.Reservations).SingleOrDefaultAsync(c=>c.Id==id);
         }
 
-
-
-
         [HttpPost]
         [Route("Register")]
         //POST : /api/ApplicationUser/Register

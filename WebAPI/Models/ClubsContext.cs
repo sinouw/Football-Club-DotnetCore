@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebAPI.Models.Auth.Roles;
+using WebAPI.Models.Roles;
 using WebAPI.Models.Sports;
 
 namespace WebAPI.Models
@@ -25,7 +26,8 @@ namespace WebAPI.Models
             builder.Entity<IdentityRole>().HasData(
                     new { Id = "1", Name = "SuperAdmin", NormalizedName = "SUPERADMIN" },
                     new { Id = "2", Name = "ClubAdmin", NormalizedName = "CLUBADMIN" },
-                    new { Id = "3", Name = "Client", NormalizedName = "CLIENT" }
+                    new { Id = "3", Name = "Client", NormalizedName = "CLIENT" },
+                    new { Id = "4", Name = "TruckDriver", NormalizedName = "TRUCKDRIVER" }
                 );
 
             builder.Entity<Client>()
@@ -46,6 +48,10 @@ namespace WebAPI.Models
             .HasMany(bc => bc.Clubs)
             .WithOne(c => c.ClubAdmin);
 
+            builder.Entity<ClubAdmin>()
+            .HasMany(bc => bc.TruckDrivers)
+            .WithOne(c => c.ClubAdmin);
+
             builder.Entity<SuperAdmin>()
             .HasMany(bc => bc.Clubs)
             .WithOne(c => c.SuperAdmin);
@@ -61,6 +67,7 @@ namespace WebAPI.Models
         public DbSet<ClubAdmin> ClubAdmins { get; set; }
         public DbSet<Client> Clients { get; set; }
         public DbSet<Terrain> Terrains { get; set; }
+        public DbSet<TruckDriver> TruckDrivers { get; set; }
         public DbSet<Club> Clubs { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<Image> Images { get; set; }
