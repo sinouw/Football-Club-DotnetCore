@@ -27,6 +27,7 @@ namespace WebAPI.Controllers.Sports
 
         // GET: api/Clubs
         [HttpGet]
+        //[Authorize(Roles = "SuperAdmin")]
         public async Task<ActionResult<IEnumerable<Club>>> GetClubs()
         {
             return await _context.Clubs.Include(c=>c.Terrains).ToListAsync();

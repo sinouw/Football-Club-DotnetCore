@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.OData;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,10 +25,20 @@ namespace WebAPI.Controllers.Sports
 
         // GET: api/Reservations
         [HttpGet]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations()
         {
             return await _context.Reservations.Include(r => r.Client).Include(r => r.Terrain).ToListAsync();
         }
+
+        // GET: api/Reservations/GetReservationsByClubAdmin/5
+        [HttpGet("[action]/{id}")]
+        [Authorize(Roles = "ClubAdmin, SuperAdmin")]
+        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservationsByClubAdmin(Guid id)
+        {
+            return await _context.Reservations.Include(r => r.Client).Include(r => r.Terrain).ThenInclude(t => t.club).Where(t => t.Terrain.club.ClubAdminId == id).ToListAsync();
+        }
+
 
         // GET: api/Reservations/5
         [HttpGet("terrains/{id}")]
