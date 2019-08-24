@@ -37,6 +37,11 @@ namespace WebAPI.Models
         public string lng { get; set; }
         public string lat { get; set; }
 
+        public string City { get; set; }
+        public string State { get; set; }
+        public string StreetAddress { get; set; }
+        public string Postal { get; set; }
+
         public ICollection<Terrain> Terrains { get; set; }
 
         //Navigation props
