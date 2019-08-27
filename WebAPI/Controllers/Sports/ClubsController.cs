@@ -35,7 +35,7 @@ namespace WebAPI.Controllers.Sports
 
         // GET: api/Clubs/GetClubsByClubAdmin
         [HttpGet("[action]/{id}")]
-        [Authorize(Roles = "ClubAdmin, SuperAdmin")]
+        [Authorize(Roles = "ClubAdmin, SuperAdmin,Client")]
         public IEnumerable<Club> GetClubsByClubAdmin(Guid id)
         {
             return _context.Clubs.Include(c => c.Terrains).Where(c => c.ClubAdminId == id);

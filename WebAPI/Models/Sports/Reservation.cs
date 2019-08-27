@@ -18,6 +18,7 @@ namespace WebAPI.Models
         public Guid IdTerrain { get; set; }
         public Terrain Terrain { get; set; }
         public string StartReservation { get; set; }
+        public string Duration { get; set; }
         public string EndReservation { get; set; }
         public string status { get; set; }
         public double Price { get; set; }

@@ -100,7 +100,7 @@ namespace WebAPI
             }
 
             app.UseCors(builder =>
-            builder.WithOrigins(Configuration["ApplicationSettings:Client_URL"].ToString())
+            builder.WithOrigins(Configuration["ApplicationSettings:Client_URL"].ToString(), "http://localhost:4300")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials()

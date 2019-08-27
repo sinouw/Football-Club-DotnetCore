@@ -25,7 +25,7 @@ namespace WebAPI.Controllers.Sports
 
         // GET: api/Reservations
         [HttpGet]
-        [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin,Client,ClubAdmin")]
         public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations()
         {
             return await _context.Reservations.Include(r => r.Client).Include(r => r.Terrain).ToListAsync();
@@ -33,14 +33,14 @@ namespace WebAPI.Controllers.Sports
 
         // GET: api/Reservations/GetReservationsByClubAdmin/5
         [HttpGet("[action]/{id}")]
-        [Authorize(Roles = "ClubAdmin, SuperAdmin")]
+        [Authorize(Roles = "ClubAdmin, SuperAdmin,Client")]
         public async Task<ActionResult<IEnumerable<Reservation>>> GetReservationsByClubAdmin(Guid id)
         {
             return await _context.Reservations.Include(r => r.Client).Include(r => r.Terrain).ThenInclude(t => t.club).Where(t => t.Terrain.club.ClubAdminId == id).ToListAsync();
         }
 
 
-        // GET: api/Reservations/5
+        // GET: api/Reservations/terrains/5
         [HttpGet("terrains/{id}")]
         [EnableQuery()]
         public async Task<ActionResult> GetReservationByTerrain(Guid id)
@@ -57,14 +57,6 @@ namespace WebAPI.Controllers.Sports
         }
 
 
-
-
-        //// GET: api/Reservations
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<Reservation>>> GetFreeReservations()
-        //{
-        //    return 
-        //}
 
         // GET: api/Reservations/5
         [HttpGet("{id}")]
@@ -162,9 +154,11 @@ namespace WebAPI.Controllers.Sports
                 }
             }
 
-            
+            var terr = await _context.Terrains.Include(t => t.Reservations).SingleOrDefaultAsync(r => r.IdTerrain == resu.IdTerrain);
             resu.StartReservation = reservation.StartReservation;
             resu.EndReservation = reservation.EndReservation;
+            resu.Duration = ((NewreservationEnd - NewreservationStart).TotalHours).ToString();
+            resu.Price = Double.Parse(resu.Duration) * terr.Price;
             resu.status = reservation.status;
 
             _context.Entry(resu).State = EntityState.Modified;
@@ -195,7 +189,7 @@ namespace WebAPI.Controllers.Sports
 
             DateTime NewreservationStart= Convert.ToDateTime(reservation.StartReservation);
             DateTime NewreservationEnd= Convert.ToDateTime(reservation.EndReservation);
-
+            
             var terrain = await _context.Terrains.Include(t=>t.Reservations).SingleOrDefaultAsync(r => r.IdTerrain == reservation.IdTerrain);
             if (terrain == null)
             {
@@ -235,9 +229,21 @@ namespace WebAPI.Controllers.Sports
             }
             try
             {
-                
-                double hours = (NewreservationEnd - NewreservationStart).TotalHours;
-                reservation.Price = hours * terrain.Price;
+
+
+                if (reservation.Duration == null)
+                {
+                    var Duration = (NewreservationEnd - NewreservationStart).TotalHours;
+                    reservation.Price = Duration * terrain.Price;
+                    reservation.Duration = Duration.ToString();
+                }
+                else
+                {
+                    double Duration = Double.Parse(reservation.Duration);
+                    reservation.Duration= Duration.ToString();
+                    NewreservationEnd = NewreservationStart.AddHours(Duration);
+                    reservation.Price = Duration * terrain.Price;
+                }
                 _context.Reservations.Add(reservation);
                 await _context.SaveChangesAsync();
                 return CreatedAtAction("GetReservation", new { id = reservation.IdReservation }, reservation);

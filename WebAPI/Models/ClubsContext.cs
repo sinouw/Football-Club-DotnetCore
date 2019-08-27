@@ -47,6 +47,7 @@ namespace WebAPI.Models
             builder.Entity<ClubAdmin>()
             .HasMany(bc => bc.Clubs)
             .WithOne(c => c.ClubAdmin);
+            //.HasForeignKey(c=>c.ClubAdminId);
 
             builder.Entity<ClubAdmin>()
             .HasMany(bc => bc.TruckDrivers)
@@ -55,6 +56,7 @@ namespace WebAPI.Models
             builder.Entity<SuperAdmin>()
             .HasMany(bc => bc.Clubs)
             .WithOne(c => c.SuperAdmin);
+            //.HasForeignKey(c => c.SuperAdminId);
 
             builder.Entity<Terrain>()
                .HasMany(t => t.Images)
