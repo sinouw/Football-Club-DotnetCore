@@ -71,6 +71,7 @@ namespace WebAPI.Models
         public DbSet<Terrain> Terrains { get; set; }
         public DbSet<TruckDriver> TruckDrivers { get; set; }
         public DbSet<Club> Clubs { get; set; }
+        public DbSet<Address> Addresses { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<Image> Images { get; set; }
 

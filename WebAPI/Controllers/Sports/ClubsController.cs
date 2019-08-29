@@ -30,7 +30,7 @@ namespace WebAPI.Controllers.Sports
         //[Authorize(Roles = "SuperAdmin")]
         public async Task<ActionResult<IEnumerable<Club>>> GetClubs()
         {
-            return await _context.Clubs.Include(c=>c.Terrains).ToListAsync();
+            return await _context.Clubs.Include(c=>c.Terrains).Include(c=>c.ClubAdmin).ToListAsync();
         }
 
         // GET: api/Clubs/GetClubsByClubAdmin
@@ -40,7 +40,6 @@ namespace WebAPI.Controllers.Sports
         {
             return _context.Clubs.Include(c => c.Terrains).Where(c => c.ClubAdminId == id);
         }
-
 
 
         // GET: api/algolia
@@ -85,6 +84,8 @@ namespace WebAPI.Controllers.Sports
 
             return club;
         }
+
+
 
         //Put : /api/Club/ToggleStatus
         [HttpPut("ToggleStatus/{id}")]
