@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebAPI.Models;
 
 namespace WebAPI.Migrations
 {
     [DbContext(typeof(ClubsContext))]
-    partial class EshopContextModelSnapshot : ModelSnapshot
+    [Migration("20190829125908_adress")]
+    partial class adress
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -296,18 +298,16 @@ namespace WebAPI.Migrations
 
             modelBuilder.Entity("WebAPI.Models.Sports.Address", b =>
                 {
-                    b.Property<Guid>("IdAddress")
+                    b.Property<string>("gouv")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("city");
-
-                    b.Property<string>("gouv");
 
                     b.Property<string>("lat");
 
                     b.Property<string>("lng");
 
-                    b.HasKey("IdAddress");
+                    b.HasKey("gouv");
 
                     b.ToTable("Addresses");
                 });

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +36,7 @@ namespace WebAPI.Controllers.Users
 
         // GET: api/ClubAdmin
         [HttpGet]
+        [EnableQuery]
         public async Task<ActionResult<IEnumerable<ClubAdmin>>> GetTerrains()
         {
             return await _context.ClubAdmins.Include(ca=>ca.Clubs).ThenInclude(cc=>cc.Terrains).ToListAsync();
